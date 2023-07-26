@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario de Barbería</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #D5D8DC;
+      }
+              a {
+        display: inline-block;
+        position: relative;
+        background-color: none;
+        color: blue;
+        text-decoration: none;
+      padding: 10px;
+      border-radius: 40px;
+        }
+        a:before,
+        a:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-sizing: border-box;
+        transform: scale(0);
+        transition: 0.5s;
+         border-radius: 40px;
+             }
+        a:before {
+        border-bottom: 2px solid black;
+        border-left: 2px solid black;
+        transform-origin: 0 100%;
+        }
+        a:after {
+        border-top: 2px solid black;
+        border-right: 2px solid black;
+        transform-origin: 100% 0%;
+
+        }
+        a:hover:after,
+        a:hover:before {
+        transform: scale(1);
+
+        }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f2f2f2;
+      border-radius: 10px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    input[type="text"],
+    select,
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .barcode {
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    .barcode img {
+      width: 200px;
+      height: auto;
+    }
+
+    .invoice {
+      max-width: 600px;
+      margin: 20px auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .invoice p {
+      margin-bottom: 10px;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .button-container button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }.button-container button:hover {
+      background-color: red;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s;
+    }
+
+    .fade-out {
+      animation: fadeIn 1s reverse;
+    }
+
+    .transition {
+      transition: all 0.5s ease;
+    }
+
+    .card {
+      padding: 20px;
+      background-color: #f2f2f2;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .card:hover {
+      transform: scale(1.1);
+    }
+
+    .card::after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 10px;
+    }
+
+    .card:hover::after {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Formulario de Barbería</h1>
+  <form id="barber-form">
+    <label for="nombre">Nombre del Cliente:</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="tipo-corte">Tipo de Corte:</label>
+    <select id="tipo-corte" name="tipo-corte" required>
+      <option value="">Seleccionar</option>
+      <option value="Corte Clásico">Corte Clásico</option>
+      <option value="Corte Moderno">Corte Moderno</option>
+      <option value="Corte a Navaja">Corte a Navaja</option>
+    </select>
+
+    <label for="precio-corte">Precio del Corte:</label>
+    <input type="number" id="precio-corte" name="precio-corte" required>
+
+    <div class="button-container">
+      <button type="submit">Generar Boleta</button>
+         <button type="Reset">Generar Boleta</button>
+         <p>
+         <a href="index.html" style="text-decoration: none; ">Volver</a></p>
+    </div>
+  </form>
+
+  <div id="invoice-container" style="display: none; max-width: 400px;margin: 0 auto;padding: 20px;  background-color: #f2f2f2;
+      border-radius: 10px;margin-top: 20px;">
+    <h2>Boleta Electrónica de Barberia Js</h2>
+    <div id="invoice-details"></div>
+    <div class="button-container">
+      <button id="print-button">Imprimir</button>
+      <button id="pdf-button">Enviar PDF por WhatsApp</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('barber-form');
+    const invoiceContainer = document.getElementById('invoice-container');
+    const invoiceDetails = document.getElementById('invoice-details');
+    const printButton = document.getElementById('print-button');
+    const pdfButton = document.getElementById('pdf-button');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      generateInvoice(data);
+    });
+
+    printButton.addEventListener('click', function () {
+      window.print();
+    });
+
+    pdfButton.addEventListener('click', function () {
+      const invoiceHTML = invoiceContainer.innerHTML;
+      const pdfFileName = 'boleta.pdf';
+
+      // Código para generar un archivo PDF y enviarlo por WhatsApp
+      // Aquí se utilizaría una biblioteca externa como jsPDF o html2pdf
+      // para generar el PDF y enviarlo por WhatsApp.
+
+
+      console.log('Generando PDF y enviándolo por WhatsApp...');
+    });
+
+    function generateInvoice(data) {
+      invoiceDetails.innerHTML = `
+        <p><strong>Nombre del Cliente:</strong> ${data.nombre}</p>
+        <p><strong>Tipo de Corte:</strong> ${data['tipo-corte']}</p>
+        <p><strong>Precio del Corte:</strong> S/.${data['precio-corte']}.00 soles</p>
+      `;
+
+      invoiceContainer.classList.add('fade-in');
+      invoiceContainer.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

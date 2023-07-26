@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inicio de Sesión</title>
+  <style>
+    a {
+display: inline-block;
+position: relative;
+color: red;
+text-decoration: none;
+transition: all .5s ease;
+transform-style: preserve-3d;
+}
+a:after {
+content: "Volver";
+position: absolute;
+top: -100%;
+left: 0px;
+width: 100%;
+color: blue;
+transform-origin: left bottom;
+transform: rotateX(90deg);
+}
+a:hover {
+transform-origin: center bottom;
+transform: rotateX(-90deg) translateY(100%);
+}
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-form {
+      max-width: 400px;
+      padding: 40px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color:#6CE191  ;
+    }
+
+    .welcome-message {
+      display: none;
+      margin-top: 40px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #f2f2f2;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background-color: #4CAF50;
+      transition: width 1s;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <form id="login-form" class="login-form">
+      <h1>Iniciar Sesión</h1>
+      <label for="username">Usuario:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Ingresar</button>
+       <button type="reset">Nuevo</button>
+       <p>
+       <a href="index.html" style="text-decoration: none; ">Login</a>
+      <div id="welcome-message" class="welcome-message">
+        <p>Bienvenido <span id="username-display"></span>!</p>
+        <div class="progress-bar">
+          <span></span>
+        </div>
+      </div>
+     
+    </form>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const welcomeMessage = document.getElementById('welcome-message');
+    const usernameDisplay = document.getElementById('username-display');
+    const progressBar = document.querySelector('.progress-bar span');
+
+    loginForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      if (username === 'usuario' && password === 'contraseña') {
+        // Credenciales válidas, se muestra el mensaje de bienvenida y se redirige al usuario a la página "formulario"
+        welcomeMessage.style.display = 'block';
+        welcomeMessage.classList.add('fade-in');
+        setTimeout(function () {
+          window.location.href = 'form.html';
+        }, 2000); // Redirección después de 2 segundos
+      } else {
+          showErrorMessage();
+        // Credenciales inválidas, se muestra un mensaje de error
+        errorMessage.textContent = 'Credenciales inválidas. Por favor, inténtalo de nuevo.';
+        errorMessage.style.display = 'block';
+      }
+
+      // Aquí puedes realizar la validación de las credenciales ingresadas
+      // Si las credenciales son válidas, muestra el mensaje de bienvenida y redirige a otra página
+      // En este ejemplo, simplemente se muestra el mensaje de bienvenida y la barra de progreso
+
+      showWelcomeMessage(username);
+    });
+    function showWelcomeMessage(username) {
+      usernameDisplay.textContent = username;
+      loginForm.classList.add('fade-out');
+      welcomeMessage.classList.add('fade-in');
+      animateProgressBar();
+    }
+
+    function animateProgressBar() {
+      let width = 0;
+      const interval = setInterval(function () {
+        if (width >= 100) {
+          clearInterval(interval);
+        } else {
+          width++;
+          progressBar.style.width = width + '%';
+        }
+      }, 10);
+    }
+    function showErrorMessage() {
+      errorMessage.style.display = 'block';
+      errorMessage.style.animation = 'fadeOut 2s forwards';
+    }
+  </script>
+</body>
+</html>
